@@ -4,7 +4,18 @@ on:
     types: [opened]
 permissions:
   pull-requests: write
+
 jobs:
-  build:
-    name: Post welcome comment
+  post-welcome-comment:
     runs-on: ubuntu-latest
+    steps:
+      - name: Post a welcome comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Welcome! We are excited to review your pull request.'
+            })
